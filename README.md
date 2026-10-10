@@ -1,4 +1,4 @@
-# Open Inventory Helper
+# Open Inventory Helper for Steam
 
 A Chrome, Edge, Brave and Opera extension (Manifest V3) that adds prices, selling and trading tools right inside the Steam interface.
 Open source, no ads, no analytics, no server of its own.
@@ -52,3 +52,5 @@ Requires Chromium 111 or newer.
 ## License
 
 [MIT](LICENSE)
+
+Not affiliated with Valve Corporation. Steam and the Steam logo are trademarks of Valve Corporation.

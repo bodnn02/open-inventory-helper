@@ -29,7 +29,7 @@
     "type": "module"
   },
   "action": {
-    "default_title": "Open Inventory Helper",
+    "default_title": "__MSG_extName__",
     "default_popup": "popup/popup.html",
     "default_icon": {
       "16": "icons/icon16.png",

@@ -507,7 +507,7 @@ async function applyOfferCount(count) {
     chrome.notifications.create('oih-trades', {
       type: 'basic',
       iconUrl: chrome.runtime.getURL('icons/icon128.png'),
-      title: 'Open Inventory Helper',
+      title: 'Open Inventory Helper for Steam',
       message: s.lang === 'en' || (s.lang === 'auto' && !navigator.language.startsWith('ru'))
         ? `Incoming trade offers: ${count}`
         : `Входящих предложений обмена: ${count}`
