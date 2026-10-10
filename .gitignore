@@ -1,0 +1,20 @@
+# Allowlist: only the extension and its docs are versioned.
+/*
+!/.gitignore
+
+# Extension package
+!/manifest.json
+!/_locales/
+!/background/
+!/content/
+!/icons/
+!/popup/
+!/shared/
+
+# Docs (README shows the store screenshots)
+!/README.md
+!/LICENSE
+!/PRIVACY.md
+!/store/
+/store/*
+!/store/screenshots/

@@ -1,0 +1,378 @@
+/*
+ * Open Inventory Helper — styles on Steam Community pages. Class prefix: oih-.
+ * Colors, buttons and dialogs follow Steam's own classes so additions blend into the page.
+ */
+
+.oih-root, .oih-overlay, .oih-toasts {
+  --oih-text: #c6d4df;
+  --oih-muted: #8f98a0;
+  --oih-blue: #67c1f5;
+  --oih-green: #a4d007;
+  --oih-red: #d94c4c;
+  --oih-panel: rgba(0, 0, 0, .2);
+  --oih-line: rgba(255, 255, 255, .06);
+  font-family: "Motiva Sans", Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  color: var(--oih-text);
+  box-sizing: border-box;
+}
+.oih-root *, .oih-overlay * { box-sizing: border-box; }
+
+.oih-muted { color: var(--oih-muted); }
+.oih-error { color: var(--oih-red); }
+.oih-ok { color: var(--oih-green); }
+.oih-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.oih-section-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--oih-muted); }
+
+/* ---------- buttons: Steam's btnv6_blue_hoverfade and btn_green_white_innerfade ---------- */
+.oih-btn {
+  border: 0;
+  border-radius: 2px;
+  padding: 0 12px;
+  height: 28px;
+  font: 13px/28px "Motiva Sans", Arial, sans-serif;
+  background: rgba(103, 193, 245, .2);
+  color: #67c1f5;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.oih-btn:hover:not(:disabled) { background: linear-gradient(-60deg, #417a9b 5%, #67c1f5 95%); color: #fff; }
+.oih-btn:disabled { opacity: .4; cursor: default; }
+.oih-btn-primary { background: linear-gradient(to bottom, #a4d007 5%, #536904 95%); color: #d2e885; }
+.oih-btn-primary:hover:not(:disabled) { background: linear-gradient(to bottom, #b6d908 5%, #80a006 95%); color: #fff; }
+.oih-btn-danger:hover:not(:disabled) { background: linear-gradient(-60deg, #8a2f2f 5%, #c94a3f 95%); }
+.oih-btn-small { height: 24px; line-height: 24px; padding: 0 8px; font-size: 12px; margin: 2px; }
+
+/* Select mode switch: a checkbox drawn inside the button. */
+.oih-btn-toggle { position: relative; padding-left: 28px; }
+.oih-btn-toggle::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  margin-top: -7px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+}
+.oih-btn-toggle.oih-btn-on { background: linear-gradient(-60deg, #417a9b 5%, #67c1f5 95%); color: #fff; }
+.oih-btn-toggle.oih-btn-on::before { content: "✓"; font: bold 10px/11px Arial, sans-serif; text-align: center; }
+
+.oih-icon-btn {
+  border: 0;
+  background: none;
+  color: var(--oih-blue);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  padding: 0 4px;
+}
+.oih-icon-btn:hover:not(:disabled) { color: #fff; }
+.oih-icon-btn:disabled { opacity: .35; cursor: default; }
+.oih-link { color: var(--oih-blue); text-decoration: none; cursor: pointer; }
+.oih-link:hover { color: #fff; }
+
+/* Steam's dark inset input. */
+.oih-input {
+  background: rgba(0, 0, 0, .25);
+  color: #fff;
+  border: 1px solid #000;
+  border-radius: 3px;
+  box-shadow: 1px 1px 0 rgba(255, 255, 255, .1);
+  padding: 0 8px;
+  height: 28px;
+  font: 13px "Motiva Sans", Arial, sans-serif;
+  min-width: 0;
+}
+select.oih-input { padding-right: 4px; background: #1f2126; }
+.oih-input:focus { outline: none; border-color: #4e92b9; }
+.oih-price-input { width: 90px; }
+.oih-qty { width: 64px; }
+.oih-check { display: inline-flex; gap: 4px; align-items: center; cursor: pointer; }
+
+/* ---------- inventory toolbar ---------- */
+.oih-invbar {
+  background: var(--oih-panel);
+  padding: 10px 12px;
+  margin: 0 0 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.oih-invbar-main { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+.oih-invbar-value { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.oih-bar-value { font-size: 20px; font-weight: 300; color: #fff; }
+.oih-invbar-sel { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; border-top: 1px solid var(--oih-line); padding-top: 8px; }
+.oih-invbar-sources { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; }
+.oih-src-chip b { color: #c6d4df; font-weight: normal; }
+.oih-src-chip.oih-src-primary b { color: #fff; }
+.oih-progress { height: 2px; background: rgba(255, 255, 255, .07); overflow: hidden; }
+.oih-progress-fill { height: 100%; width: 0; background: var(--oih-blue); transition: width .3s; }
+
+/* ---------- market data inside Steam's item card ---------- */
+.oih-mkt-actions { display: flex; flex-direction: column; gap: 6px; font-family: "Motiva Sans", Arial, sans-serif; font-size: 12px; color: #8f98a0; }
+.oih-mkt-actions .oih-row { gap: 6px; }
+.oih-steam-btn { cursor: pointer; text-decoration: none; }
+/* Steam's Sell button and our quick buttons in one row. React nodes are not moved:
+   the Sell button's parent wraps, its other children take the full width. */
+.oih-sell-row { display: flex !important; flex-direction: row !important; flex-wrap: wrap !important; align-items: center; column-gap: 8px; }
+.oih-sell-row > div, .oih-sell-row > .oih-mkt-actions { flex-basis: 100%; }
+.oih-sell-row > .oih-break { flex-basis: 100%; height: 0; }
+.oih-sell-row > .oih-sell-btn { flex: 0 0 auto; }
+.oih-quick { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; flex: 0 1 auto; }
+.oih-mkt-actions > .oih-quick { display: flex; }
+.oih-mkt-actions .oih-input { height: 24px; font-size: 12px; }
+.oih-mkt-line .oih-link { font-size: inherit; }
+
+/* ---------- select mode ---------- */
+.oih-select-mode #inventories .item { cursor: pointer; }
+.oih-select-mode #inventories .item:hover:not(.oih-selected)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(103, 193, 245, .8);
+  pointer-events: none;
+  z-index: 4;
+}
+.item.oih-selected::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid #67c1f5;
+  background: rgba(103, 193, 245, .18);
+  pointer-events: none;
+  z-index: 4;
+}
+.item.oih-selected::before {
+  content: "✓";
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  background: #67c1f5;
+  color: #1b2838;
+  font: bold 11px/16px Arial, sans-serif;
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+}
+.item.oih-listed { opacity: .35; filter: grayscale(.8); }
+.oih-select-hint { display: none; color: var(--oih-muted); font-size: 12px; }
+.oih-selecting .oih-select-hint { display: inline; }
+#your_slots .item, #their_slots .item, #inventories .item { position: relative; }
+
+/* Price tag on item tiles. */
+.item .oih-badge {
+  position: absolute;
+  left: 2px;
+  bottom: 2px;
+  max-width: calc(100% - 4px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, .7);
+  color: #c6d4df;
+  font: 10px/14px Arial, sans-serif;
+  padding: 0 3px;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ---------- dialogs (Steam newmodal) ---------- */
+.oih-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .8);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.oih-modal {
+  background: radial-gradient(circle at top left, rgba(74, 81, 92, .4) 0%, rgba(75, 81, 92, 0) 60%), #25282e;
+  box-shadow: 0 0 12px #000;
+  width: 460px;
+  max-width: 100%;
+  max-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+}
+.oih-modal-wide { width: 980px; }
+.oih-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 10px;
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #fff;
+}
+.oih-x { background: none; border: 0; color: var(--oih-muted); font-size: 26px; cursor: pointer; line-height: 1; }
+.oih-x:hover { color: #fff; }
+.oih-modal-body { padding: 8px 24px 16px; overflow: auto; display: flex; flex-direction: column; gap: 12px; color: #acb2b8; }
+.oih-modal-foot { padding: 12px 24px 20px; display: flex; justify-content: flex-start; gap: 8px; }
+.oih-confirm-text { margin: 0; line-height: 1.5; font-size: 14px; }
+.oih-summary { display: flex; flex-direction: column; gap: 10px; }
+.oih-summary-counts { display: flex; flex-wrap: wrap; gap: 4px 28px; }
+.oih-summary-counts .oih-stat { gap: 8px; }
+.oih-summary-sources { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.oih-stat { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+.oih-stat b { color: #fff; font-weight: normal; }
+.oih-stat-time { flex-basis: 100%; font-size: 11px; text-align: right; }
+.oih-time { white-space: nowrap; }
+.oih-summary .oih-src-stat { flex-direction: column; align-items: flex-start; gap: 1px; padding: 6px 8px; background: rgba(0, 0, 0, .2); }
+.oih-summary .oih-src-stat.oih-stat-primary { box-shadow: inset 2px 0 0 #67c1f5; }
+.oih-summary .oih-src-stat .oih-stat-time { flex-basis: auto; text-align: left; }
+
+.oih-table-wrap { overflow: auto; max-height: 45vh; background: rgba(0, 0, 0, .2); }
+.oih-table-tall { max-height: 55vh; }
+.oih-table { width: 100%; border-collapse: collapse; }
+.oih-table th {
+  position: sticky;
+  top: 0;
+  background: #1d2025;
+  text-align: left;
+  font-weight: normal;
+  color: var(--oih-muted);
+  padding: 8px;
+  white-space: nowrap;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.oih-table td { padding: 4px 8px; border-top: 1px solid var(--oih-line); white-space: nowrap; color: var(--oih-text); }
+.oih-table tr:hover td { background: rgba(103, 193, 245, .06); }
+.oih-table th.oih-th-primary, .oih-table td.oih-td-primary { color: #fff; }
+.oih-table td.oih-pick { cursor: pointer; }
+.oih-table td.oih-pick:hover { color: #fff; text-decoration: underline dotted; }
+.oih-name-cell { white-space: normal !important; min-width: 220px; }
+.oih-icon { width: 40px; height: 40px; object-fit: contain; display: block; }
+.oih-age-cell { white-space: nowrap; }
+.oih-age-cell span { color: var(--oih-muted); font-size: 12px; }
+.oih-age-cell span.oih-stale { color: #d9a74a; }
+.oih-log { max-height: 150px; overflow: auto; font-size: 12px; display: flex; flex-direction: column; gap: 2px; }
+
+/* ---------- market and trade pages ---------- */
+.oih-panel {
+  background: var(--oih-panel);
+  padding: 10px 12px;
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.oih-hist { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.oih-hist-col { display: flex; flex-direction: column; gap: 2px; }
+.market_listing_row { position: relative; }
+.oih-row-check { position: absolute; left: -22px; top: 50%; transform: translateY(-50%); cursor: pointer; }
+.market_listing_row.oih-removed, .tradeoffer.oih-accepted { opacity: .35; }
+.oih-trade-sum { margin: 6px 0; padding: 6px 10px; background: var(--oih-panel); display: flex; justify-content: space-between; gap: 8px; }
+.oih-trade-sum b { color: #fff; font-weight: normal; }
+
+/* Comparison with the market: a line under the item name and the price color. */
+.oih-cmp-line { display: block; margin-top: 2px; font-size: 12px; line-height: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.oih-cmp-good { color: #a4d007; }
+.oih-cmp-bad { color: #d98a7a; }
+.oih-cmp-wait { color: #8f98a0; }
+.oih-cmp-min { color: #8f98a0; margin-left: 8px; }
+.market_listing_price span[title].oih-price-good, .market_listing_price.oih-price-good { color: #a4d007 !important; }
+.market_listing_price span[title].oih-price-bad, .market_listing_price.oih-price-bad { color: #d98a7a !important; }
+.market_listing_row.oih-row-bad { box-shadow: inset 2px 0 0 #a8453b; }
+.market_listing_row.oih-row-good { box-shadow: inset 2px 0 0 #5c7e10; }
+
+/* Floating fallback when there is no place to embed. */
+.oih-dock {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: 300px;
+  max-width: calc(100vw - 32px);
+  background: #1b2838;
+  box-shadow: 0 0 12px #000;
+  z-index: 9000;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ---------- toasts ---------- */
+.oih-toasts { position: fixed; top: 16px; right: 16px; z-index: 10001; display: flex; flex-direction: column; gap: 8px; max-width: 360px; }
+.oih-toast {
+  background: #25282e;
+  border-left: 3px solid var(--oih-blue);
+  padding: 10px 12px;
+  box-shadow: 0 0 12px #000;
+  color: var(--oih-text);
+  font-size: 13px;
+}
+.oih-toast-success { border-left-color: var(--oih-green); }
+.oih-toast-error { border-left-color: var(--oih-red); }
+
+@media (max-width: 640px) {
+  .oih-hist { grid-template-columns: 1fr; }
+}
+
+/* ---------- other marketplaces in the item card ---------- */
+.oih-mkt-others { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; margin-top: 2px; }
+.oih-other { display: inline-flex; align-items: baseline; gap: 4px; white-space: nowrap; }
+.oih-other-label { color: #8f98a0; }
+.oih-other-diff { font-size: 11px; color: #8f98a0; }
+.oih-other-diff.oih-up { color: #a4d007; }
+.oih-other-diff.oih-down { color: #d98a7a; }
+.oih-other-na .oih-price-link { color: #8f98a0; }
+
+/* Prices and source names linking to the source site. */
+a.oih-price-link, a.oih-source-link { color: inherit; text-decoration: none; }
+a.oih-price-link { color: #c6d4df; }
+.oih-other a.oih-price-link { color: #fff; }
+a.oih-price-link:hover, a.oih-source-link:hover { color: #67c1f5; }
+
+/* ---------- suggested prices (a click fills the field) ---------- */
+.oih-rec { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-size: 12px; margin-top: 2px; }
+.oih-rec-chip {
+  border: 0;
+  background: rgba(103, 193, 245, .2);
+  color: #67c1f5;
+  border-radius: 2px;
+  padding: 0 8px;
+  font: 12px/22px "Motiva Sans", Arial, sans-serif;
+  cursor: pointer;
+}
+.oih-rec-chip:hover { background: linear-gradient(-60deg, #417a9b 5%, #67c1f5 95%); color: #fff; }
+.oih-rec-chip .oih-muted { color: inherit; opacity: .75; }
+.oih-rec-chip b { font-weight: normal; }
+#oih_steam_sell_rec { margin: 8px 0; }
+
+/* ---------- price tags on trade items ---------- */
+.item .oih-badge-link, .trade_item .oih-badge-link { pointer-events: auto; cursor: pointer; text-decoration: none; }
+.item .oih-badge-link[href]:hover, .trade_item .oih-badge-link[href]:hover { color: #fff; }
+.trade_item { position: relative; }
+.trade_item .oih-badge {
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  background: rgba(0, 0, 0, .75);
+  color: #c6d4df;
+  font: 10px/13px Arial, sans-serif;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 3;
+}
+.oih-offer-side { margin-left: 8px; color: #8f98a0; font-size: 12px; font-weight: normal; }
+.oih-offer-sum { margin: 6px 12px 4px; padding: 6px 10px; background: rgba(0, 0, 0, .2); font-size: 13px; }
+.oih-offer-sum b { color: #fff; font-weight: normal; }
+.oih-offer-sum b.oih-ok { color: #a4d007; }
+.oih-offer-sum b.oih-error { color: #d98a7a; }
+.oih-cmp-tail { margin-left: 8px; color: #8f98a0; }
+.oih-cmp-line .oih-icon-btn { font-size: 13px; padding: 0 2px; margin-left: 4px; vertical-align: baseline; }

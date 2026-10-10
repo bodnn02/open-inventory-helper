@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Open Inventory Helper</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <img src="../icons/icon32.png" width="20" height="20" alt="">
+      <span class="name">Open Inventory Helper</span>
+      <span class="ver" id="version"></span>
+    </div>
+  </header>
+
+  <div class="status"><span id="trades">…</span><span id="saved" class="saved"></span></div>
+
+  <div class="layout">
+    <nav class="tabs" role="tablist">
+      <button type="button" role="tab" data-tab="general" data-i18n="tabGeneral">Общие</button>
+      <button type="button" role="tab" data-tab="prices" data-i18n="tabPrices">Цены</button>
+      <button type="button" role="tab" data-tab="inventory" data-i18n="tabInventory">Инвентарь</button>
+      <button type="button" role="tab" data-tab="market" data-i18n="tabMarket">Торговая площадка</button>
+      <button type="button" role="tab" data-tab="trades" data-i18n="tabTrades">Обмены</button>
+      <button type="button" role="tab" data-tab="store" data-i18n="tabStore">Магазин</button>
+    </nav>
+
+    <form id="form" class="content" autocomplete="off">
+      <section class="panel" data-panel="general" role="tabpanel">
+        <h2 data-i18n="interfaceSec">Интерфейс</h2>
+        <label class="row"><span data-i18n="lang">Язык</span>
+          <select name="lang">
+            <option value="auto">Auto</option>
+            <option value="ru">Русский</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+        <label class="row"><span data-i18n="currency">Валюта</span>
+          <select name="currency" id="currency"></select>
+        </label>
+        <label class="row"><span class="text"><span data-i18n="convertCurrency">Пересчитывать цены в мою валюту</span>
+          <small data-i18n="convertHint">Цены площадок и магазина в другой валюте пересчитываются по курсу Augmented Steam API</small></span>
+          <input type="checkbox" class="switch" name="convertCurrency"></label>
+
+        <h2 data-i18n="privacyTitle">Конфиденциальность</h2>
+        <p class="note" data-i18n="privacy">Без рекламы и аналитики. Расширение обращается только к steamcommunity.com и к публичным API сервисов, которые вы сами включили (Skinport, Market.CSGO, Waxpeer, Augmented Steam, IsThereAnyDeal). Настройки и кэш хранятся локально в браузере.</p>
+      </section>
+
+      <section class="panel" data-panel="prices" role="tabpanel" hidden>
+        <h2 data-i18n="sourcesSec">Источники цен</h2>
+        <div id="sources" class="sources"></div>
+        <p class="note" data-i18n="sourcesHint">Площадки, кроме Steam, отдают прайс по CS2, Dota 2, TF2 и Rust одним запросом. Браузер спросит разрешение на доступ к их публичному API.</p>
+        <label class="row"><span class="text"><span data-i18n="primarySource">Основной источник</span>
+          <small data-i18n="primaryHint">Цены на плитках, в итоговой стоимости и в обменах</small></span>
+          <select name="primarySource" id="primarySource"></select>
+        </label>
+
+        <h2 data-i18n="cacheSec">Кэш и запросы</h2>
+        <label class="row"><span class="text"><span data-i18n="cacheMin">Кэш цен, минут</span>
+          <small data-i18n="cacheHint">Цена, полученная на любой странице, используется везде, пока не устареет</small></span>
+          <input type="number" name="priceCacheMinutes" min="1" max="1440">
+        </label>
+        <label class="row"><span data-i18n="valCache">Кэш цен для оценки, часов</span>
+          <input type="number" name="valuationCacheHours" min="1" max="168">
+        </label>
+        <label class="row"><span class="text"><span data-i18n="delay">Пауза между запросами, мс</span>
+          <small data-i18n="delayHint">Защита от ограничения запросов Steam (429)</small></span>
+          <input type="number" name="requestDelayMs" min="500" max="30000" step="100">
+        </label>
+        <div class="row">
+          <span class="text"><span data-i18n="clearCacheTitle">Сохранённые цены</span>
+            <small data-i18n="clearCacheHint">Удалить кэш цен, курсов и минимумов магазина</small></span>
+          <button id="clearCache" type="button" data-i18n="clearCache">Очистить</button>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="inventory" role="tabpanel" hidden>
+        <h2 data-i18n="displaySec">Отображение</h2>
+        <label class="row"><span data-i18n="inventoryTools">Панель инструментов инвентаря</span>
+          <input type="checkbox" class="switch" name="inventoryTools"></label>
+        <label class="row"><span data-i18n="autoValuate">Считать стоимость инвентаря автоматически</span>
+          <input type="checkbox" class="switch" name="autoValuate"></label>
+        <label class="row"><span data-i18n="showItemPrices">Цены на плитках предметов</span>
+          <input type="checkbox" class="switch" name="showItemPrices"></label>
+        <label class="row"><span data-i18n="autoLoad">Загружать ордера для выбранного предмета</span>
+          <input type="checkbox" class="switch" name="autoLoadSelectedPrice"></label>
+
+        <h2 data-i18n="sellingSec">Продажа</h2>
+        <label class="row"><span data-i18n="strategy">Стратегия цены</span>
+          <select name="sellStrategy">
+            <option value="lowest" data-i18n="stLowest">Мин. цена − скидка</option>
+            <option value="median" data-i18n="stMedian">Медиана</option>
+            <option value="buyorder" data-i18n="stBuyorder">Лучший ордер</option>
+            <option value="manual" data-i18n="stManual">Вручную</option>
+          </select>
+        </label>
+        <label class="row"><span data-i18n="undercut">Скидка от мин. цены, центов</span>
+          <input type="number" name="undercutCents" min="0" max="10000">
+        </label>
+        <label class="row"><span class="text"><span data-i18n="sellFresh">Свежесть цен при продаже, минут</span>
+          <small data-i18n="sellFreshHint">Более свежие цены берутся из кэша без нового запроса</small></span>
+          <input type="number" name="sellFreshMinutes" min="1" max="1440">
+        </label>
+        <label class="row"><span data-i18n="sellDelay">Пауза между продажами, мс</span>
+          <input type="number" name="sellDelayMs" min="300" max="30000" step="100">
+        </label>
+        <label class="row"><span data-i18n="confirmSell">Спрашивать подтверждение продажи</span>
+          <input type="checkbox" class="switch" name="confirmSell"></label>
+      </section>
+
+      <section class="panel" data-panel="market" role="tabpanel" hidden>
+        <h2 data-i18n="itemPageSec">Страница предмета</h2>
+        <label class="row"><span data-i18n="history">Статистика истории цен</span>
+          <input type="checkbox" class="switch" name="marketHistoryStats"></label>
+        <label class="row"><span data-i18n="quickBuy">Кнопка быстрой покупки</span>
+          <input type="checkbox" class="switch" name="marketQuickBuy"></label>
+        <label class="row"><span data-i18n="confirmBuy">Спрашивать подтверждение покупки</span>
+          <input type="checkbox" class="switch" name="confirmBuy"></label>
+
+        <h2 data-i18n="myListingsSec">Мои лоты и ордера</h2>
+        <label class="row"><span data-i18n="marketCompare">Сравнивать с рынком</span>
+          <input type="checkbox" class="switch" name="marketCompare"></label>
+        <label class="row"><span data-i18n="bulk">Массовое снятие лотов и ордеров</span>
+          <input type="checkbox" class="switch" name="marketBulkListings"></label>
+      </section>
+
+      <section class="panel" data-panel="trades" role="tabpanel" hidden>
+        <h2 data-i18n="tradeWindowSec">Окно обмена</h2>
+        <label class="row"><span data-i18n="tradePrices">Цены и суммы сторон</span>
+          <input type="checkbox" class="switch" name="tradePrices"></label>
+        <label class="row"><span data-i18n="addMultiple">Добавление нескольких предметов</span>
+          <input type="checkbox" class="switch" name="tradeAddMultiple"></label>
+
+        <h2 data-i18n="offersSec">Список предложений</h2>
+        <label class="row"><span data-i18n="tradeOfferValues">Стоимость предложений</span>
+          <input type="checkbox" class="switch" name="tradeOfferValues"></label>
+        <label class="row"><span data-i18n="quickAccept">Кнопка «Принять сразу»</span>
+          <input type="checkbox" class="switch" name="quickAccept"></label>
+
+        <h2 data-i18n="notifySec">Уведомления</h2>
+        <label class="row"><span data-i18n="notify">Счётчик входящих обменов на иконке</span>
+          <input type="checkbox" class="switch" name="notifyEnabled"></label>
+        <label class="row"><span data-i18n="notifyDesktop">Системные уведомления о новых обменах</span>
+          <input type="checkbox" class="switch" name="notifyDesktop"></label>
+        <label class="row"><span data-i18n="interval">Проверять каждые, минут</span>
+          <input type="number" name="notifyIntervalMin" min="1" max="120">
+        </label>
+      </section>
+
+      <section class="panel" data-panel="store" role="tabpanel" hidden>
+        <h2 data-i18n="storeSec">Магазин Steam</h2>
+        <label class="row"><span class="text"><span data-i18n="storeHistory">Исторические минимумы</span>
+          <small data-i18n="storeHistoryHint">Игры, DLC, наборы и комплекты; данные Augmented Steam API</small></span>
+          <input type="checkbox" class="switch" name="storeHistory"></label>
+
+        <h2 data-i18n="itadKey">Ключ IsThereAnyDeal</h2>
+        <div class="keyrow">
+          <input type="text" name="itadKey" id="itadKey" spellcheck="false" placeholder="API key">
+          <button type="button" id="itadSave" class="primary" data-i18n="itadSave">Сохранить</button>
+        </div>
+        <p class="note" data-i18n="itadHint">Необязательно: нужен для графика истории цен при наведении на цену. Ключ бесплатный и хранится только в вашем браузере.</p>
+        <div class="howto">
+          <div class="howto-title" data-i18n="itadHowTitle">Как получить ключ</div>
+          <ol>
+            <li data-i18n="itadStep1">Войдите на isthereanydeal.com (можно через Steam).</li>
+            <li data-i18n="itadStep2">На странице «My Apps» нажмите «Register app», введите любое название.</li>
+            <li data-i18n="itadStep3">Скопируйте «API Key» в поле выше и нажмите «Сохранить».</li>
+          </ol>
+          <a class="howto-link" href="https://isthereanydeal.com/apps/my/" target="_blank" rel="noopener noreferrer" data-i18n="itadOpen">Открыть My Apps на IsThereAnyDeal</a>
+        </div>
+      </section>
+    </form>
+  </div>
+
+  <script src="../shared/settings.js"></script>
+  <script src="../shared/fees.js"></script>
+  <script src="../shared/sources.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

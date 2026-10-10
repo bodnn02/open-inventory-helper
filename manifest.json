@@ -1,0 +1,133 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_extName__",
+  "short_name": "OIH",
+  "version": "1.5.0",
+  "description": "__MSG_extDescription__",
+  "default_locale": "en",
+  "minimum_chrome_version": "111",
+  "permissions": [
+    "storage",
+    "alarms",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://steamcommunity.com/*",
+    "https://api.augmentedsteam.com/*"
+  ],
+  "optional_host_permissions": [
+    "https://api.skinport.com/*",
+    "https://market.csgo.com/*",
+    "https://market.dota2.net/*",
+    "https://tf2.tm/*",
+    "https://rust.tm/*",
+    "https://api.waxpeer.com/*",
+    "https://api.isthereanydeal.com/*"
+  ],
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Open Inventory Helper",
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://steamcommunity.com/*"
+      ],
+      "js": [
+        "content/bridge.js"
+      ],
+      "css": [
+        "content/ui.css"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://steamcommunity.com/id/*/inventory*",
+        "https://steamcommunity.com/profiles/*/inventory*"
+      ],
+      "js": [
+        "shared/fees.js",
+        "shared/sources.js",
+        "content/main/core.js",
+        "content/main/inventory.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://steamcommunity.com/market*"
+      ],
+      "js": [
+        "shared/fees.js",
+        "shared/sources.js",
+        "content/main/core.js",
+        "content/main/market.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://steamcommunity.com/tradeoffer/*"
+      ],
+      "js": [
+        "shared/fees.js",
+        "shared/sources.js",
+        "content/main/core.js",
+        "content/main/trade.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://steamcommunity.com/id/*/tradeoffers*",
+        "https://steamcommunity.com/profiles/*/tradeoffers*"
+      ],
+      "js": [
+        "shared/fees.js",
+        "shared/sources.js",
+        "content/main/core.js",
+        "content/main/tradeoffers.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://store.steampowered.com/app/*",
+        "https://store.steampowered.com/sub/*",
+        "https://store.steampowered.com/bundle/*"
+      ],
+      "js": [
+        "shared/settings.js",
+        "shared/fees.js",
+        "content/store.js"
+      ],
+      "css": [
+        "content/store.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}
