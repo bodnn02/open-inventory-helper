@@ -3,7 +3,7 @@
 A Chrome, Edge, Brave and Opera extension (Manifest V3) that adds prices, selling and trading tools right inside the Steam interface.
 Open source, no ads, no analytics, no server of its own.
 
-**[Install from the Chrome Web Store]([https://chromewebstore.google.com/detail/TODO](https://chromewebstore.google.com/detail/open-inventory-helper-for/eppdcljelkghimbchnlclklmcmkgkkpg))**
+**[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/open-inventory-helper-for/eppdcljelkghimbchnlclklmcmkgkkpg)**
 
 ![Inventory value and a price on every item](store/screenshots/1-inventory.png)
 
